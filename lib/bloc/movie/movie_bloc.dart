@@ -24,17 +24,11 @@ class BlocMovieBloc extends Bloc<BlocMovieEvent, BlocMovieState> {
         } else {
           emit(state.copyWith(check: event.check, popularModel: []));
         }
-
-        // if (mList[0].error != null) {
-        //   emit(MovieError(mList[0].error));
-        // }
       } catch (e) {
-        /// emit(MovieError("Failed to fetch data. is your device online?"));
+        print(e);
       }
     });
 
-    // on((event, emit) {
-
-    // });
+  
   }
 }

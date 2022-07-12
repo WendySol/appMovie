@@ -32,12 +32,11 @@ class _HomePageState extends State<HomePage> {
             child: BlocProvider.value(
           value: blocInitial,
           child: Container(
-            width: 400,
-            height: 600,
+            width: double.infinity,
+            height: double.infinity,
             child: Column(
               children: [
                 SizedBox(height: responsive.hp(3)),
-                const Text("FILTERS"),
 
                 // CheckBox(
                 //   checkitem: checkRated,
@@ -45,15 +44,21 @@ class _HomePageState extends State<HomePage> {
                 //   blocInitial: blocInitial,
                 //   event: GetPopularMovie(),
                 // ),
-                const Text("RESULTS"),
+
                 SizedBox(height: responsive.hp(3)),
                 BlocBuilder<BlocMovieBloc, BlocMovieState>(
                   builder: (context, state) {
                     return Container(
-                      width: 400,
-                      height: 500,
+                      //  color: Colors.pink,
+                      width: responsive.wp(90),
+                      height: responsive.hp(80),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const Text(
+                            "FILTERS",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           SizedBox(
                               height: 40,
                               child: CheckboxListTile(
@@ -69,12 +74,18 @@ class _HomePageState extends State<HomePage> {
                                 value: checkPopular,
                                 onChanged: (newValue) {
                                   checkPopular = newValue!;
-                                  blocInitial.add(GetPopularMovie(checkPopular));
+                                  blocInitial
+                                      .add(GetPopularMovie(checkPopular));
                                 },
                               )),
+                          SizedBox(height: responsive.hp(2)),
+                          const Text("RESULTS",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: responsive.hp(3)),
                           (state is MovieLoading)
                               ? _buildLoading()
-                              : gridMovie(context, state.popularModel)
+                              : gridMovie(
+                                  context, responsive, state.popularModel)
                         ],
                       ),
                     );
@@ -86,36 +97,50 @@ class _HomePageState extends State<HomePage> {
         )));
   }
 
-  Widget gridMovie(BuildContext context, List<PopularModel> listmovie) {
+  Widget gridMovie(BuildContext context, Responsive responsive,
+      List<PopularModel> listmovie) {
     return Expanded(
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
+          crossAxisCount: 2,
         ),
         itemCount: listmovie.length,
         itemBuilder: (BuildContext context, int index) {
-          return  Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      color: Colors.blue,
-                      width: 100,
-                      height: 120,
-                      child: InkWell(
-                          onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => DetallefotoPage(
-                            //             lecturaData: lectura[0],
-                            //             index: index,
-                            //             nombreImage: nombreImage)));
-                          },
-                          child: Center(child: Text(listmovie[index].title!))),
-                    ),
-                  ),
-                );
+          return Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                color: Colors.white,
+                // width: responsive.wp(20),
+                // height: responsive.hp(50),
+                child: InkWell(
+                    onTap: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => ));
+                    },
+                    child: Center(
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/loading.gif',
+                        image:
+                            'http://image.tmdb.org/t/p/w500/${listmovie[index].posterPath}',
+                        width: responsive.wp(38),
+                        height: responsive.hp(22),
+                        fit: BoxFit.cover,
+                      ),
+
+                      //         Image.network(
+                      //   'http://image.tmdb.org/t/p/w500/${listmovie[index].posterPath}',
+                      //   fit: BoxFit.fitWidth,
+                      //   width: responsive.wp(40),
+                      //   // height: responsive.hp(30),
+                      // )
+                    )),
+              ),
+            ),
+          );
         },
       ),
     );
