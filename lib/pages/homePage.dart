@@ -23,6 +23,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    blocInitial.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
 

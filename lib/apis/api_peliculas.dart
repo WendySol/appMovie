@@ -6,9 +6,10 @@ import 'package:http/http.dart' as http;
 class ApiMovie {
   String apiBaseURL = "https://api.themoviedb.org/3/movie";
   String apikey = "34738023d27013e6d1b995443764da44";
-  List<PopularModel> listVacia = [];
+  List<PopularModel> list = [];
 
   Future<List<PopularModel>> getPopular() async {
+    List<PopularModel> listVacia = [];
     try {
       //https: //api.themoviedb.org/3/movie/popular?api_key=34738023d27013e6d1b995443764da44
       final url = '$apiBaseURL/popular?api_key=$apikey';
@@ -50,11 +51,11 @@ class ApiMovie {
 
         if (listResult.isNotEmpty) {
           for (var i = 0; i < listResult.length; i++) {
-            listVacia.add(PopularModel.fromJson(decodedData["results"][i]));
+            list.add(PopularModel.fromJson(decodedData["results"][i]));
           }
         }
 
-        return listVacia;
+        return list;
       } else {
         return [];
       }
